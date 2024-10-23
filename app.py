@@ -1,11 +1,9 @@
-"""Command-line calculator with REPL functionality, supporting arithmetic operations, plugins, and logging."""
 import logging
 import logging.config
 import os
 import sys
 from dotenv import load_dotenv  # Third-party import
 from commands import CommandsFactory  # First-party import
-
 
 class App:
     """Main application class for the command-line calculator with REPL functionality."""
@@ -35,25 +33,33 @@ class App:
         """Return the value of the specified environment variable."""
         return self.settings.get(env_var, None)
 
-
-
     def repl(self):
         """Run the Read-Eval-Print Loop (REPL) for user input and command processing."""
         while True:
-            # try:
-                user_input = input(">>> ").strip()
-                user_input_parts = user_input.split()
-                if len(user_input_parts) == 0:
-                    logging.warning("No command entered.")
-                    continue  # Skip iteration if no input
+            user_input = input(">>> ").strip()
+            user_input_parts = user_input.split()
+            if len(user_input_parts) == 0:
+                logging.warning("No command entered.")
+                continue  # Skip iteration if no input
 
-    
+            command_name = user_input_parts[0]
+            arguments = user_input_parts[1:]  # Arguments are everything after the command
+
+            if command_name in self.command_handler.commands.keys():
+                try:
+                    self.command_handler.commands[command_name].execute(*arguments)
+                except Exception as e:
+                    logging.error("Error executing command '%s': %s", command_name, e)
+                    print(f"Error: Failed to execute '{command_name}'. {e}")
+            else:
+                logging.error("No such command: %s", command_name)
+                print(f"Error: Unknown command '{command_name}'.")
 
     def start(self):   
         self.command_handler.import_plugins(os.getenv("PLUGIN_FILE_PATH"))
         self.repl()
 
-
-
-app = App()
-app.start()
+# Entry point of the application
+if __name__ == "__main__":
+    app = App()
+    app.start()
