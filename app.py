@@ -4,6 +4,7 @@ import logging.config
 import os
 import sys
 from dotenv import load_dotenv  # Third-party import
+from commands import CommandsFactory  # First-party import
 
 
 class App:
@@ -13,6 +14,7 @@ class App:
         self.configure_logging()
         load_dotenv()
         self.settings = self.load_environment_variables()
+        self.command_handler = CommandsFactory()
 
     def configure_logging(self):
         """Configure logging settings from a file or set basic configuration."""
@@ -48,7 +50,7 @@ class App:
     
 
     def start(self):   
-      
+        self.command_handler.import_plugins(os.getenv("PLUGIN_FILE_PATH"))
         self.repl()
 
 
