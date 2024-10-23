@@ -37,19 +37,15 @@ def test_data_plugin_execute_success(monkeypatch, capfd, caplog, tmpdir):
 def test_data_plugin_execute_file_not_found(monkeypatch, capfd, caplog):
     """Test the execute method when the CSV file does not exist."""
     # Set an invalid path for the environment variable
-    monkeypatch.setenv("PRODUCT_FILE_PATH", "invalid/path/to/books.csv")
-    
+    monkeypatch.setenv("PRODUCT_FILE_PATH", "invalid/path/to/books.csv")    
     # Capture the log output
     with caplog.at_level(logging.ERROR):
         # Execute the data command
         Csv.execute()
-
         # Capture the printed output
         out, _ = capfd.readouterr()
-
         # Verify the error message is printed
         assert "Error: The file 'invalid/path/to/books.csv' was not found." in out
-
         # Verify the log output
         assert "File not found: invalid/path/to/books.csv" in caplog.text
 

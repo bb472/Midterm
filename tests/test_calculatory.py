@@ -25,7 +25,7 @@ def calc_instance():
     reset_history_file()  # Ensure no pre-existing history
     return Calculator()
 @pytest.fixture
-def test_DataFrameFacade():
+def data_frame_facade_instance():
     """Provide a fresh instance of DataFrameFacade with a reset history file."""
     reset_history_file()
     return DataFrameFacade()
@@ -100,40 +100,40 @@ def test_save_and_load_history(calc_instance):
 
 ### Tests for the DataFrameFacade class ###
 
-def test_add_entry(test_DataFrameFacade):
+def test_add_entry(data_frame_facade_instance):
     """Test adding an entry to the history via DataFrameFacade."""
-    test_DataFrameFacade.add_entry("Test Entry")
-    assert "Test Entry" in test_DataFrameFacade.show_history()
+    data_frame_facade_instance.add_entry("Test Entry")
+    assert "Test Entry" in data_frame_facade_instance.show_history()
 
-def test_save_history(test_DataFrameFacade):
+def test_save_history(data_frame_facade_instance):
     """Test saving the history via DataFrameFacade."""
-    test_DataFrameFacade.add_entry("Entry to Save")
-    test_DataFrameFacade.save_history()
+    data_frame_facade_instance.add_entry("Entry to Save")
+    data_frame_facade_instance.save_history()
     assert os.path.exists("calcHistory.csv")
 
-def test_load_history(test_DataFrameFacade):
+def test_load_history(data_frame_facade_instance):
     """Test loading history entries via DataFrameFacade."""
-    test_DataFrameFacade.add_entry("Entry to Load")
-    test_DataFrameFacade.save_history()
+    data_frame_facade_instance.add_entry("Entry to Load")
+    data_frame_facade_instance.save_history()
 
     new_facade = DataFrameFacade()
     assert "Entry to Load" in new_facade.show_history()
 
-def test_clear_history_facade(test_DataFrameFacade):
+def test_clear_history_facade(data_frame_facade_instance):
     """Test clearing the history via DataFrameFacade."""
-    test_DataFrameFacade.add_entry("Clear This Entry")
-    test_DataFrameFacade.clear_history()
-    assert test_DataFrameFacade.show_history() == "No history available."
+    data_frame_facade_instance.add_entry("Clear This Entry")
+    data_frame_facade_instance.clear_history()
+    assert data_frame_facade_instance.show_history() == "No history available."
 
 
-def test_delete_entry(test_DataFrameFacade):
+def test_delete_entry(data_frame_facade_instance):
     """Test deleting an entry in the history via DataFrameFacade."""
-    test_DataFrameFacade.add_entry("Delete Me")
-    assert test_DataFrameFacade.delete_entry(0) == "Deleted record: Delete Me"
-    assert test_DataFrameFacade.show_history() == "No history available."
+    data_frame_facade_instance.add_entry("Delete Me")
+    assert data_frame_facade_instance.delete_entry(0) == "Deleted record: Delete Me"
+    assert data_frame_facade_instance.show_history() == "No history available."
 
-def test_delete_invalid_entry(test_DataFrameFacade):
+def test_delete_invalid_entry(data_frame_facade_instance):
     """Test attempting to delete a non-existent entry in the history."""
-    assert test_DataFrameFacade.delete_entry(5) == "Invalid index. No record deleted."
+    assert data_frame_facade_instance.delete_entry(5) == "Invalid index. No record deleted."
 
 # pylint: disable=redefined-outer-name

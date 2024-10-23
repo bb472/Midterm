@@ -14,5 +14,4 @@ class Greet(Command):
     def execute():
         """Execute the greet command with two arguments."""
         print("Hello World")        
-        # Log the arguments correctly
         logging.info("Hello World")

@@ -7,8 +7,8 @@ data from a specified CSV file.
 """
 import logging
 import os
+import pandas as pd  
 from commands import Command
-import pandas as pd
 
 class Csv(Command):
     """A plugin that displays data from a CSV file."""

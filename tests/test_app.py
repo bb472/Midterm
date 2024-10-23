@@ -1,3 +1,4 @@
+"""Unit tests for the App class and its REPL functionality."""
 import pytest
 from app import App
 

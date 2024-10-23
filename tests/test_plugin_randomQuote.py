@@ -1,6 +1,13 @@
+"""
+Test suite for the RandomQuote plugin.
+
+This module contains tests for the functionality of the RandomQuote class,
+ensuring that the execute method behaves as expected and outputs the correct
+quotes along with appropriate logging.
+"""
 import logging
 
-from plugins.randomQuote import RandomQuote
+from plugins.random_quote import RandomQuote
 
 # Test case for RandomQuote
 def test_random_quote_plugin_execute(capfd, caplog):

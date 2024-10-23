@@ -36,7 +36,6 @@ class Calculator(Command):
         except ValueError:
             logging.error("Invalid arguments for arithmetic operation. Arguments must be numbers.")
             return 
-
         if operation == "add":
             return self.add( arg1, arg2)
         if operation == "subtract":
