@@ -2,6 +2,7 @@ import logging
 import logging.config
 import os
 from dotenv import load_dotenv  # Third-party import
+from calculator import Calculator  # First-party import
 from commands import CommandsFactory  # First-party import
 import sys
 
@@ -14,6 +15,7 @@ class App:
         load_dotenv()
         self.settings = self.load_environment_variables()
         self.command_handler = CommandsFactory()
+        self.calculator = Calculator()
 
     def configure_logging(self):
         """Configure logging settings from a file or set basic configuration."""
@@ -43,7 +45,7 @@ class App:
             if len(user_input_parts) == 0:
                 logging.warning("No command entered.")
                 continue  # Skip iteration if no input
-
+            operation = user_input_parts[0]
             command_name = user_input_parts[0]
             arguments = user_input_parts[1:]  # Arguments are everything after the command
 
@@ -57,6 +59,10 @@ class App:
                     logging.info("Exiting the calculator.")
                     print("Exiting the calculator.")
                     sys.exit(0)
+                    continue
+            if operation in ['add', 'subtract', 'multiply', 'divide',"saveHistory","loadHistory","deleteHistoryRecord","clearHistory"] :
+                    result =  self.calculator.execute(operation, *arguments)
+                    print(f"Result: {result}")
                     continue
 
             if command_name in self.command_handler.commands.keys():
