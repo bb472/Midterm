@@ -97,3 +97,43 @@ def test_save_and_loadHistory(calc_fixture):
     new_calc = Calculator()
     loaded_history = new_calc.loadHistory()
     assert "Added 5 + 5 = 10" in loaded_history
+
+### Tests for the DataFrameFacade class ###
+
+def test_add_entry(h_facade):
+    """Test adding an entry to the history via DataFrameFacade."""
+    h_facade.add_entry("Test Entry")
+    assert "Test Entry" in h_facade.show_history()
+
+def test_saveHistory(h_facade):
+    """Test saving the history via DataFrameFacade."""
+    h_facade.add_entry("Entry to Save")
+    h_facade.saveHistory()
+    assert os.path.exists("calcHistory.csv")
+
+def test_loadHistory(h_facade):
+    """Test loading history entries via DataFrameFacade."""
+    h_facade.add_entry("Entry to Load")
+    h_facade.saveHistory()
+
+    new_facade = DataFrameFacade()
+    assert "Entry to Load" in new_facade.show_history()
+
+def test_clearHistory_facade(h_facade):
+    """Test clearing the history via DataFrameFacade."""
+    h_facade.add_entry("Clear This Entry")
+    h_facade.clearHistory()
+    assert h_facade.show_history() == "No history available."
+
+
+def test_delete_entry(h_facade):
+    """Test deleting an entry in the history via DataFrameFacade."""
+    h_facade.add_entry("Delete Me")
+    assert h_facade.delete_entry(0) == "Deleted record: Delete Me"
+    assert h_facade.show_history() == "No history available."
+
+def test_delete_invalid_entry(h_facade):
+    """Test attempting to delete a non-existent entry in the history."""
+    assert h_facade.delete_entry(5) == "Invalid index. No record deleted."
+
+# pylint: disable=redefined-outer-name
