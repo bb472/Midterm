@@ -3,6 +3,7 @@ import logging.config
 import os
 from dotenv import load_dotenv  # Third-party import
 from commands import CommandsFactory  # First-party import
+import sys
 
 class App:
     """Main application class for the command-line calculator with REPL functionality."""
@@ -52,6 +53,12 @@ class App:
                 print("Available commands:", self.command_handler.all_plugins())
                 continue  # Skip the rest of the loop
 
+            if user_input.lower() == 'exit':
+                    logging.info("Exiting the calculator.")
+                    print("Exiting the calculator.")
+                    sys.exit(0)
+                    continue
+
             if command_name in self.command_handler.commands.keys():
                 try:
                     self.command_handler.commands[command_name].execute(*arguments)
@@ -64,6 +71,7 @@ class App:
 
     def start(self):   
         self.command_handler.import_plugins(os.getenv("PLUGIN_FILE_PATH"))
+        logging.info("Type 'exit' to exit.")
         logging.info("Type 'menu' to get available commands.")
         self.repl()
 
