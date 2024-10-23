@@ -1,0 +1,6 @@
+ProductID,ProductName,Category,Price,Stock
+1,Widget A,Widgets,19.99,100
+2,Widget B,Widgets,29.99,50
+3,Gadget C,Gadgets,39.99,75
+4,Gadget D,Gadgets,49.99,20
+5,Thingamajig E,Thingamajigs,59.99,0
