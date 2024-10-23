@@ -1,5 +1,6 @@
 """
-This module offers a framework for dynamically loading and executing plugins through the Command base class 
+This module offers a framework for dynamically loading 
+and executing plugins through the Command base class 
 and the CommandsFactory singleton class, which oversees command registration and execution. 
 To use it, define a plugin by subclassing Command, implement the execute method, and
  utilize CommandsFactory for loading and executing commands.
@@ -57,18 +58,14 @@ class CommandsFactory: #factory
                 module = importlib.import_module(f"plugins.{module_name}")
                 # Register each class that inherits from Command
                 for _, cls in inspect.getmembers(module, inspect.isclass):
-                    if issubclass(cls, Command) and cls is not Command:
-                        # used to identify the arguments
-                 
+                    if issubclass(cls, Command) and cls is not Command:                        # used to identify the arguments
                         self.create_plugin(module_name, cls())
 
     def create_plugin(self, command_name, plugin):
         """Register a new plugin and its commands."""
         if isinstance(plugin, Command):
             logging.info("Plugin '%s' registered successfully.", plugin.__class__.__name__)
-            
             self.commands[command_name] = plugin
-            
 
     def all_plugins(self):
         """List all available plugin commands."""

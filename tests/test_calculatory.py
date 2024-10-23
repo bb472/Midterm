@@ -20,77 +20,77 @@ def reset_history_file():
 
 # Fixture to create a fresh instance of Calculator for each test
 @pytest.fixture
-def calc_fixture():
+def calc_instance():
     """Provide a fresh instance of Calculator with a reset history file."""
     reset_history_file()  # Ensure no pre-existing history
     return Calculator()
 @pytest.fixture
-def h_facade():
+def test_DataFrameFacade():
     """Provide a fresh instance of DataFrameFacade with a reset history file."""
     reset_history_file()
     return DataFrameFacade()
 
 ### Tests for the Calculator class ###
 
-def test_add(calc_fixture):
+def test_add(calc_instance):
     """Test the addition functionality of the Calculator."""
-    assert calc_fixture.add(2, 3) == 5
-    assert calc_fixture.add(-1, 1) == 0
-    assert "Added 2 + 3 = 5" in calc_fixture.show_history()
+    assert calc_instance.add(2, 3) == 5
+    assert calc_instance.add(-1, 1) == 0
+    assert "Added 2 + 3 = 5" in calc_instance.show_history()
 
-def test_subtract(calc_fixture):
+def test_subtract(calc_instance):
     """Test the subtraction functionality of the Calculator."""
-    assert calc_fixture.subtract(5, 3) == 2
-    assert calc_fixture.subtract(-3, -2) == -1
-    assert "Subtracted 5 - 3 = 2" in calc_fixture.show_history()
+    assert calc_instance.subtract(5, 3) == 2
+    assert calc_instance.subtract(-3, -2) == -1
+    assert "Subtracted 5 - 3 = 2" in calc_instance.show_history()
 
-def test_multiply(calc_fixture):
+def test_multiply(calc_instance):
     """Test the multiplication functionality of the Calculator."""
-    assert calc_fixture.multiply(3, 4) == 12
-    assert calc_fixture.multiply(0, 10) == 0
-    assert "Multiplied 3 * 4 = 12" in calc_fixture.show_history()
+    assert calc_instance.multiply(3, 4) == 12
+    assert calc_instance.multiply(0, 10) == 0
+    assert "Multiplied 3 * 4 = 12" in calc_instance.show_history()
 
-def test_divide(calc_fixture):
+def test_divide(calc_instance):
     """Test the division functionality of the Calculator."""
-    assert calc_fixture.divide(10, 2) == 5
-    assert calc_fixture.divide(-10, 5) == -2
-    assert "Divided 10 / 2 = 5.0" in calc_fixture.show_history()
+    assert calc_instance.divide(10, 2) == 5
+    assert calc_instance.divide(-10, 5) == -2
+    assert "Divided 10 / 2 = 5.0" in calc_instance.show_history()
 
-def test_divide_by_zero(calc_fixture):
+def test_divide_by_zero(calc_instance):
     """Test that dividing by zero raises a ValueError."""
     with pytest.raises(ValueError, match="Cannot divide by zero."):
-        calc_fixture.divide(10, 0)
+        calc_instance.divide(10, 0)
 
-def test_show_history(calc_fixture):
+def test_show_history(calc_instance):
     """Test the history display functionality of the Calculator."""
-    calc_fixture.add(1, 2)
-    calc_fixture.multiply(3, 4)
-    history = calc_fixture.show_history()
+    calc_instance.add(1, 2)
+    calc_instance.multiply(3, 4)
+    history = calc_instance.show_history()
     assert "Added 1 + 2 = 3" in history
     assert "Multiplied 3 * 4 = 12" in history
 
-def test_clear_history(calc_fixture):
+def test_clear_history(calc_instance):
     """Test clearing the history in the Calculator."""
-    calc_fixture.add(1, 1)
-    calc_fixture.clear_history()
-    assert calc_fixture.show_history() == "No history available."
+    calc_instance.add(1, 1)
+    calc_instance.clear_history()
+    assert calc_instance.show_history() == "No history available."
 
-def test_delete_history_record(calc_fixture):
+def test_delete_history_record(calc_instance):
     """Test deleting a specific history record in the Calculator."""
-    calc_fixture.add(1, 1)
-    calc_fixture.add(2, 2)
-    assert calc_fixture.delete_history_record(1) == "Deleted record: Added 2 + 2 = 4"
-    assert "Added 2 + 2 = 4" not in calc_fixture.show_history()
+    calc_instance.add(1, 1)
+    calc_instance.add(2, 2)
+    assert calc_instance.delete_history_record(1) == "Deleted record: Added 2 + 2 = 4"
+    assert "Added 2 + 2 = 4" not in calc_instance.show_history()
 
-def test_delete_invalid_index(calc_fixture):
+def test_delete_invalid_index(calc_instance):
     """Test attempting to delete an invalid history record index."""
-    calc_fixture.add(1, 1)
-    assert calc_fixture.delete_history_record(5) == "Invalid index. No record deleted."
+    calc_instance.add(1, 1)
+    assert calc_instance.delete_history_record(5) == "Invalid index. No record deleted."
 
-def test_save_and_load_history(calc_fixture):
+def test_save_and_load_history(calc_instance):
     """Test saving and loading the calculation history."""
-    calc_fixture.add(5, 5)
-    calc_fixture.save_history()
+    calc_instance.add(5, 5)
+    calc_instance.save_history()
     assert os.path.exists("calcHistory.csv")
 
     # Create a new instance to test loading
@@ -100,40 +100,40 @@ def test_save_and_load_history(calc_fixture):
 
 ### Tests for the DataFrameFacade class ###
 
-def test_add_entry(h_facade):
+def test_add_entry(test_DataFrameFacade):
     """Test adding an entry to the history via DataFrameFacade."""
-    h_facade.add_entry("Test Entry")
-    assert "Test Entry" in h_facade.show_history()
+    test_DataFrameFacade.add_entry("Test Entry")
+    assert "Test Entry" in test_DataFrameFacade.show_history()
 
-def test_save_history(h_facade):
+def test_save_history(test_DataFrameFacade):
     """Test saving the history via DataFrameFacade."""
-    h_facade.add_entry("Entry to Save")
-    h_facade.save_history()
+    test_DataFrameFacade.add_entry("Entry to Save")
+    test_DataFrameFacade.save_history()
     assert os.path.exists("calcHistory.csv")
 
-def test_load_history(h_facade):
+def test_load_history(test_DataFrameFacade):
     """Test loading history entries via DataFrameFacade."""
-    h_facade.add_entry("Entry to Load")
-    h_facade.save_history()
+    test_DataFrameFacade.add_entry("Entry to Load")
+    test_DataFrameFacade.save_history()
 
     new_facade = DataFrameFacade()
     assert "Entry to Load" in new_facade.show_history()
 
-def test_clear_history_facade(h_facade):
+def test_clear_history_facade(test_DataFrameFacade):
     """Test clearing the history via DataFrameFacade."""
-    h_facade.add_entry("Clear This Entry")
-    h_facade.clear_history()
-    assert h_facade.show_history() == "No history available."
+    test_DataFrameFacade.add_entry("Clear This Entry")
+    test_DataFrameFacade.clear_history()
+    assert test_DataFrameFacade.show_history() == "No history available."
 
 
-def test_delete_entry(h_facade):
+def test_delete_entry(test_DataFrameFacade):
     """Test deleting an entry in the history via DataFrameFacade."""
-    h_facade.add_entry("Delete Me")
-    assert h_facade.delete_entry(0) == "Deleted record: Delete Me"
-    assert h_facade.show_history() == "No history available."
+    test_DataFrameFacade.add_entry("Delete Me")
+    assert test_DataFrameFacade.delete_entry(0) == "Deleted record: Delete Me"
+    assert test_DataFrameFacade.show_history() == "No history available."
 
-def test_delete_invalid_entry(h_facade):
+def test_delete_invalid_entry(test_DataFrameFacade):
     """Test attempting to delete a non-existent entry in the history."""
-    assert h_facade.delete_entry(5) == "Invalid index. No record deleted."
+    assert test_DataFrameFacade.delete_entry(5) == "Invalid index. No record deleted."
 
 # pylint: disable=redefined-outer-name

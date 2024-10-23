@@ -10,12 +10,9 @@ from commands import Command
 
 class Greet(Command):
     """An example plugin that provides additional functionality."""
-
-
     @staticmethod
     def execute():
         """Execute the greet command with two arguments."""
-
         print("Hello World")        
         # Log the arguments correctly
         logging.info("Hello World")
