@@ -11,19 +11,19 @@ class Calculator(Command):
     
     def execute(self, operation, *args):
         """Execute a specific operation based on the command provided."""
-        if operation in ['saveHistory', 'loadHistory', 'clearHistory', 'deleteHistoryRecord']:
-                if operation == "saveHistory":
-                    return self.saveHistory()
-                elif operation == "loadHistory":
-                    return self.loadHistory()
-                elif operation == "clearHistory":
-                    return self.clearHistory()
-                elif operation == "deleteHistoryRecord":
-                    print("deleteHistoryRecord")
+        if operation in ['save_history', 'load_history', 'clear_history', 'delete_history_record']:
+                if operation == "save_history":
+                    return self.save_history()
+                elif operation == "load_history":
+                    return self.load_history()
+                elif operation == "clear_history":
+                    return self.clear_history()
+                elif operation == "delete_history_record":
+                    print("delete_history_record")
                     if len(args) == 1 and args[0].isdigit():
-                        return self.deleteHistoryRecord(int(args[0]))
+                        return self.delete_history_record(int(args[0]))
                     else:
-                        logging.error("Invalid index provided for deleteHistoryRecord.")
+                        logging.error("Invalid index provided for delete_history_record.")
         if len(args) != 2:
              logging.error("please enter 2 arguments ")
              
@@ -44,8 +44,7 @@ class Calculator(Command):
             elif operation == "divide":
                 return self.divide( arg1, arg2)  # Handle division here
             else:
-                logging.error(f"Unknown operation: {operation}")
-         
+                logging.error(f"Unknown operation: {operation}")         
 
     def add(self, a, b):
         """Return the sum of a and b."""
@@ -91,25 +90,25 @@ class Calculator(Command):
         """Show the current calculation history."""
         return self.dataFrameFacade.show_history()
 
-    def saveHistory(self):
+    def save_history(self):
         """Save the current history to a CSV file."""
-        self.dataFrameFacade.saveHistory()
+        self.dataFrameFacade.save_history()
         return "History saved."
 
-    def loadHistory(self):
+    def load_history(self):
         """Load history from a CSV file and return it as a string."""
-        loaded_history = self.dataFrameFacade.loadHistory()
+        loaded_history = self.dataFrameFacade.load_history()
         if not loaded_history.empty:
             logging.info(loaded_history.to_string(index=False))
             return loaded_history.to_string(index=False)
         return "No history found."
 
-    def clearHistory(self):
+    def clear_history(self):
         """Clear the current calculation history."""
-        self.dataFrameFacade.clearHistory()
+        self.dataFrameFacade.clear_history()
         return "History cleared."
 
-    def deleteHistoryRecord(self, index):
+    def delete_history_record(self, index):
         """Delete a specific record from the history."""
         return self.dataFrameFacade.delete_entry(index)
 
@@ -122,7 +121,7 @@ class DataFrameFacade:
         if os.path.exists(self.history_file):
             self.history_df = pd.read_csv(self.history_file)
         else:
-            self.saveHistory()  # Create an empty history file if it doesn't exist
+            self.save_history()  # Create an empty history file if it doesn't exist
 
     def add_entry(self, entry):
         """Add a new entry to the history DataFrame."""
@@ -143,13 +142,13 @@ class DataFrameFacade:
                 logging.error("Invalid index provided for deletion.")        
         return "Invalid index. No record deleted."
 
-    def saveHistory(self):
+    def save_history(self):
         """Save the DataFrame to a CSV file."""
         self.history_df.to_csv(self.history_file, index=False)
         logging.info("History saved to '%s'.", self.history_file)
 
 
-    def loadHistory(self):
+    def load_history(self):
         """Load the history from a CSV file."""
         if os.path.exists(self.history_file):
             self.history_df = pd.read_csv(self.history_file)
@@ -158,7 +157,7 @@ class DataFrameFacade:
         logging.warning("No history file found.")
         return pd.DataFrame(columns=["Calculation"])  # Return empty DataFrame if file not found
 
-    def clearHistory(self):
+    def clear_history(self):
         """Clear the history DataFrame."""
         self.history_df = pd.DataFrame(columns=["Calculation"])
         self.history_df.to_csv(self.history_file, index=False)

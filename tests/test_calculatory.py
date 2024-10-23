@@ -69,33 +69,33 @@ def test_show_history(calc_fixture):
     assert "Added 1 + 2 = 3" in history
     assert "Multiplied 3 * 4 = 12" in history
 
-def test_clearHistory(calc_fixture):
+def test_clear_history(calc_fixture):
     """Test clearing the history in the Calculator."""
     calc_fixture.add(1, 1)
-    calc_fixture.clearHistory()
+    calc_fixture.clear_history()
     assert calc_fixture.show_history() == "No history available."
 
-def test_deleteHistoryRecord(calc_fixture):
+def test_delete_history_record(calc_fixture):
     """Test deleting a specific history record in the Calculator."""
     calc_fixture.add(1, 1)
     calc_fixture.add(2, 2)
-    assert calc_fixture.deleteHistoryRecord(1) == "Deleted record: Added 2 + 2 = 4"
+    assert calc_fixture.delete_history_record(1) == "Deleted record: Added 2 + 2 = 4"
     assert "Added 2 + 2 = 4" not in calc_fixture.show_history()
 
 def test_delete_invalid_index(calc_fixture):
     """Test attempting to delete an invalid history record index."""
     calc_fixture.add(1, 1)
-    assert calc_fixture.deleteHistoryRecord(5) == "Invalid index. No record deleted."
+    assert calc_fixture.delete_history_record(5) == "Invalid index. No record deleted."
 
-def test_save_and_loadHistory(calc_fixture):
+def test_save_and_load_history(calc_fixture):
     """Test saving and loading the calculation history."""
     calc_fixture.add(5, 5)
-    calc_fixture.saveHistory()
+    calc_fixture.save_history()
     assert os.path.exists("calcHistory.csv")
 
     # Create a new instance to test loading
     new_calc = Calculator()
-    loaded_history = new_calc.loadHistory()
+    loaded_history = new_calc.load_history()
     assert "Added 5 + 5 = 10" in loaded_history
 
 ### Tests for the DataFrameFacade class ###
@@ -105,24 +105,24 @@ def test_add_entry(h_facade):
     h_facade.add_entry("Test Entry")
     assert "Test Entry" in h_facade.show_history()
 
-def test_saveHistory(h_facade):
+def test_save_history(h_facade):
     """Test saving the history via DataFrameFacade."""
     h_facade.add_entry("Entry to Save")
-    h_facade.saveHistory()
+    h_facade.save_history()
     assert os.path.exists("calcHistory.csv")
 
-def test_loadHistory(h_facade):
+def test_load_history(h_facade):
     """Test loading history entries via DataFrameFacade."""
     h_facade.add_entry("Entry to Load")
-    h_facade.saveHistory()
+    h_facade.save_history()
 
     new_facade = DataFrameFacade()
     assert "Entry to Load" in new_facade.show_history()
 
-def test_clearHistory_facade(h_facade):
+def test_clear_history_facade(h_facade):
     """Test clearing the history via DataFrameFacade."""
     h_facade.add_entry("Clear This Entry")
-    h_facade.clearHistory()
+    h_facade.clear_history()
     assert h_facade.show_history() == "No history available."
 
 

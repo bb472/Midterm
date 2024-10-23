@@ -50,7 +50,7 @@ class App:
                 operation = user_input_parts[0]
                 arguments = user_input_parts[1:]
                 
-                if operation not in self.command_handler.all_plugins() +  ['add', 'subtract', 'multiply', 'divide',"menu","loadHistory", "saveHistory", "clearHistory", "deleteHistoryRecord","exit","menu"]:
+                if operation not in self.command_handler.all_plugins() +  ['add', 'subtract', 'multiply', 'divide',"menu","load_history", "save_history", "clear_history", "delete_history_record","exit","menu"]:
                     logging.error("No such command: unknown_command %s", user_input)
                     sys.exit(1) 
 
@@ -60,10 +60,10 @@ class App:
                     sys.exit(0)
                 if user_input.lower() == 'menu':
                     logging.info("Available commands:")
-                    logging.info(self.command_handler.all_plugins()+['add', 'subtract', 'multiply', 'divide',"saveHistory","loadHistory","delete history_record","clearHistory"])
+                    logging.info(self.command_handler.all_plugins()+['add', 'subtract', 'multiply', 'divide',"save_history","load_history","delete history_record","clear_history"])
                 
      
-                if operation in ['add', 'subtract', 'multiply', 'divide',"saveHistory","loadHistory","deleteHistoryRecord","clearHistory"] :
+                if operation in ['add', 'subtract', 'multiply', 'divide',"save_history","load_history","delete_history_record","clear_history"] :
                     result =  self.calculator.execute(operation, *arguments)
                     print(f"Result: {result}")
 
@@ -84,7 +84,7 @@ class App:
         logging.info("Calculator REPL started.")
         logging.info("Type 'exit' to exit.")
         logging.info("Type 'menu' to get available commands.")
-        logging.info("Available history commands: loadHistory, saveHistory, clearHistory, deleteHistoryRecord <index>.")
+        logging.info("Available history commands: load_history, save_history, clear_history, delete_history_record <index>.")
         self.repl()
 
 
