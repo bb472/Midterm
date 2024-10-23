@@ -1,12 +1,12 @@
 import logging
 import logging.config
 import os
-import sys
 from dotenv import load_dotenv  # Third-party import
 from commands import CommandsFactory  # First-party import
 
 class App:
     """Main application class for the command-line calculator with REPL functionality."""
+    
     def __init__(self):
         os.makedirs('logs', exist_ok=True)
         self.configure_logging()
@@ -38,12 +38,19 @@ class App:
         while True:
             user_input = input(">>> ").strip()
             user_input_parts = user_input.split()
+
             if len(user_input_parts) == 0:
                 logging.warning("No command entered.")
                 continue  # Skip iteration if no input
 
             command_name = user_input_parts[0]
             arguments = user_input_parts[1:]  # Arguments are everything after the command
+
+            # Check for the "menu" command
+            if command_name.lower() == 'menu':
+                logging.info("Available commands: %s", self.command_handler.all_plugins())
+                print("Available commands:", self.command_handler.all_plugins())
+                continue  # Skip the rest of the loop
 
             if command_name in self.command_handler.commands.keys():
                 try:
@@ -57,6 +64,7 @@ class App:
 
     def start(self):   
         self.command_handler.import_plugins(os.getenv("PLUGIN_FILE_PATH"))
+        logging.info("Type 'menu' to get available commands.")
         self.repl()
 
 # Entry point of the application
