@@ -1,63 +1,171 @@
 import logging
+import os
+import pandas as pd
+from commands import Command
 
-class Calculator:
-    """A simple calculator class for basic arithmetic operations."""
-
+class Calculator(Command):
+    """The main calculator class that performs basic arithmetic operations and manages plugins."""
+    
     def __init__(self):
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-        logging.info("Calculator initialized.")
-
+        self.dataFrameFacade = DataFrameFacade()
+    
     def execute(self, operation, *args):
         """Execute a specific operation based on the command provided."""
+        if operation in ['saveHistory', 'loadHistory', 'clearHistory', 'deleteHistoryRecord']:
+                if operation == "saveHistory":
+                    return self.saveHistory()
+                elif operation == "loadHistory":
+                    return self.loadHistory()
+                elif operation == "clearHistory":
+                    return self.clearHistory()
+                elif operation == "deleteHistoryRecord":
+                    print("deleteHistoryRecord")
+                    if len(args) == 1 and args[0].isdigit():
+                        return self.deleteHistoryRecord(int(args[0]))
+                    else:
+                        logging.error("Invalid index provided for deleteHistoryRecord.")
         if len(args) != 2:
-            logging.error("Please enter 2 arguments.")
-            return "Error: Please enter exactly 2 arguments."
+             logging.error("please enter 2 arguments ")
+             
+        else : 
+            try:
+          
+                arg1, arg2 = args
+                arg1, arg2 = float(arg1), float(arg2)  # Convert inputs to numbers
+            except ValueError:
+                logging.error("Invalid arguments for arithmetic operation. Arguments must be numbers.")
 
-        try:
-            arg1, arg2 = float(args[0]), float(args[1])  # Convert inputs to numbers
-        except ValueError:
-            logging.error("Invalid arguments for arithmetic operation. Arguments must be numbers.")
-            return "Error: Invalid arguments. Arguments must be numbers."
-
-        if operation == "add":
-            return self.add(arg1, arg2)
-        elif operation == "subtract":
-            return self.subtract(arg1, arg2)
-        elif operation == "multiply":
-            return self.multiply(arg1, arg2)
-        elif operation == "divide":
-            return self.divide(arg1, arg2)
-        else:
-            logging.error(f"Unknown operation: {operation}")
-            return f"Error: Unknown operation '{operation}'."
+            if operation == "add":
+                return self.add( arg1, arg2)
+            elif operation == "subtract":
+                return self.subtract( arg1, arg2)
+            elif operation == "multiply":
+                return self.multiply( arg1, arg2)
+            elif operation == "divide":
+                return self.divide( arg1, arg2)  # Handle division here
+            else:
+                logging.error(f"Unknown operation: {operation}")
+         
 
     def add(self, a, b):
         """Return the sum of a and b."""
         result = a + b
         entry = f"Added {a} + {b} = {result}"
+        self.dataFrameFacade.add_entry(entry)
         logging.info(entry)
+        print(entry)
         return result
 
     def subtract(self, a, b):
         """Return the result of a minus b."""
         result = a - b
         entry = f"Subtracted {a} - {b} = {result}"
+        self.dataFrameFacade.add_entry(entry)
         logging.info(entry)
+        print(entry)
         return result
 
     def multiply(self, a, b):
         """Return the product of a and b."""
         result = a * b
         entry = f"Multiplied {a} * {b} = {result}"
+
+        self.dataFrameFacade.add_entry(entry)
         logging.info(entry)
+        print(entry)
+        
         return result
 
     def divide(self, a, b):
         """Return the result of a divided by b."""
         if b == 0:
             logging.error("Division by zero attempted.")
-            return "Error: Cannot divide by zero."
+            raise ValueError("Cannot divide by zero.")
         result = a / b
         entry = f"Divided {a} / {b} = {result}"
+        self.dataFrameFacade.add_entry(entry)
         logging.info(entry)
         return result
+
+    def show_history(self):
+        """Show the current calculation history."""
+        return self.dataFrameFacade.show_history()
+
+    def saveHistory(self):
+        """Save the current history to a CSV file."""
+        self.dataFrameFacade.saveHistory()
+        return "History saved."
+
+    def loadHistory(self):
+        """Load history from a CSV file and return it as a string."""
+        loaded_history = self.dataFrameFacade.loadHistory()
+        if not loaded_history.empty:
+            logging.info(loaded_history.to_string(index=False))
+            return loaded_history.to_string(index=False)
+        return "No history found."
+
+    def clearHistory(self):
+        """Clear the current calculation history."""
+        self.dataFrameFacade.clearHistory()
+        return "History cleared."
+
+    def deleteHistoryRecord(self, index):
+        """Delete a specific record from the history."""
+        return self.dataFrameFacade.delete_entry(index)
+
+
+class DataFrameFacade:
+    """Facade class for managing history using Pandas DataFrame."""    
+    def __init__(self, history_file="calcHistory.csv"):
+        self.history_file = history_file
+        self.history_df = pd.DataFrame(columns=["Calculation"])  # Initialize an empty DataFrame
+        if os.path.exists(self.history_file):
+            self.history_df = pd.read_csv(self.history_file)
+        else:
+            self.saveHistory()  # Create an empty history file if it doesn't exist
+
+    def add_entry(self, entry):
+        """Add a new entry to the history DataFrame."""
+        new_entry = {"Calculation": entry}
+        self.history_df = pd.concat([self.history_df, pd.DataFrame([new_entry])], ignore_index=True)
+
+    def delete_entry(self, index):
+        """Delete a specific entry by index."""
+        if len(self.history_df) == 0 :
+            logging.info("empty dataframe")
+        else :
+            if 0 <= index < len(self.history_df):
+                deleted_record = self.history_df.iloc[index]
+                self.history_df = self.history_df.drop(index).reset_index(drop=True)
+                logging.info("Deleted record: %s", deleted_record['Calculation'])
+                return f"Deleted record: {deleted_record['Calculation']}"
+            else:
+                logging.error("Invalid index provided for deletion.")        
+        return "Invalid index. No record deleted."
+
+    def saveHistory(self):
+        """Save the DataFrame to a CSV file."""
+        self.history_df.to_csv(self.history_file, index=False)
+        logging.info("History saved to '%s'.", self.history_file)
+
+
+    def loadHistory(self):
+        """Load the history from a CSV file."""
+        if os.path.exists(self.history_file):
+            self.history_df = pd.read_csv(self.history_file)
+            logging.info("History loaded from '%s'.", self.history_file)
+            return self.history_df        
+        logging.warning("No history file found.")
+        return pd.DataFrame(columns=["Calculation"])  # Return empty DataFrame if file not found
+
+    def clearHistory(self):
+        """Clear the history DataFrame."""
+        self.history_df = pd.DataFrame(columns=["Calculation"])
+        self.history_df.to_csv(self.history_file, index=False)
+        logging.info("History cleared.")
+        
+    def show_history(self):
+        """Return a string representation of the current history."""
+        if not self.history_df.empty:
+            return self.history_df.to_string(index=False)
+        return "No history available."
