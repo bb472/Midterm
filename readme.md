@@ -70,7 +70,7 @@ The Calculator class handles basic arithmetic operations and tracks calculation 
 # Design Patterns Used:
 1. **Facade Pattern:**: Implemented in the DataFrameFacade class to simplify interactions with the history management functionalities. This pattern hides the complexities of the underlying operations (like adding, saving, loading, and clearing history) and provides a simplified interface.
 
-Code: (https://github.com/bb472/Midterm.git/calculator/calculator.py)
+Code: (https://github.com/bb472/Midterm.git/calculator/__init__.py)
 
 2. **Singleton Pattern:**: Utilized in the CommandsFactory class to guarantee that a single instance oversees command registration and execution, ensuring consistent behavior throughout the application.
 
