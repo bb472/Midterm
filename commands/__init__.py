@@ -10,9 +10,10 @@ import logging
 import os
 import inspect
 
+# pylint: disable=too-few-public-methods
 class Command:
     """Base class for all plugins. Each plugin must implement the execute method."""
-    def execute(self, *args):
+    def execute(self):
         """Execute the plugin command with given arguments."""
         raise NotImplementedError("Plugin must implement the execute method.")
 
@@ -45,7 +46,7 @@ class CommandsFactory: #factory
             permission (EAFP) - 
             Use when it's most likely to work."""
         try:
-            self.commands[command_name].execute() 
+            self.commands[command_name].execute()
             # depends on command_name calling the concrete command class
         except KeyError:
             logging.error("No such command: %s", command_name)
@@ -58,7 +59,7 @@ class CommandsFactory: #factory
                 module = importlib.import_module(f"plugins.{module_name}")
                 # Register each class that inherits from Command
                 for _, cls in inspect.getmembers(module, inspect.isclass):
-                    if issubclass(cls, Command) and cls is not Command:                        # used to identify the arguments
+                    if issubclass(cls, Command) and cls is not Command:
                         self.create_plugin(module_name, cls())
 
     def create_plugin(self, command_name, plugin):

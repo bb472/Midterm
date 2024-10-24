@@ -8,12 +8,13 @@ def app():
     return App()
 
 def test_app_get_environment_variable():
+    """Test the retrieval of the 'ENVIRONMENT' variable from the App."""
     app = App()
 #   Retrieve the current environment setting
     current_env = app.get_environment_variable('ENVIRONMENT')
     # Assert that the current environment is what you expect
-    assert current_env in ['DEVELOPMENT', 'TESTING', 'PRODUCTION'], f"Invalid ENVIRONMENT: {current_env}"
-
+    assert current_env in ['DEVELOPMENT', 'TESTING', 'PRODUCTION'], \
+    f"Invalid ENVIRONMENT: {current_env}"
 def test_app_start_exit_command(capfd, monkeypatch):
     """Test that the REPL exits correctly on 'exit' command."""
     # Simulate user entering 'exit'
@@ -45,7 +46,7 @@ def test_menu(app, monkeypatch, capsys):
     with pytest.raises(SystemExit):
         app.start()
     # Capture the printed output
-    captured = capsys.readouterr()    
+    captured = capsys.readouterr()
     # Check if the expected output is present
     assert "Available commands:" in captured.out
 
@@ -67,50 +68,50 @@ def test_delete_history_record(app, monkeypatch, capsys):
     """Test the delete_history_record command."""
     app.calculator.add(1, 2)  # Add something to the history
     app.calculator.save_history()  # Save it first
-    inputs = iter(['delete_history_record 0', 'exit'])  
+    inputs = iter(['delete_history_record 0', 'exit'])
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
     with pytest.raises(SystemExit):
         app.start()
     # Capture the printed output
     captured = capsys.readouterr()
-    assert "Deleted record:" in captured.out  
+    assert "Deleted record:" in captured.out
 def test_add(app, monkeypatch, capsys):
     """Test the add command."""
     monkeypatch.setattr('builtins.input', lambda _: 'add 2 3')
-    inputs = iter(['add 2 3', 'exit'])  
+    inputs = iter(['add 2 3', 'exit'])
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
     with pytest.raises(SystemExit):
         app.start()
     # Capture the printed output
     captured = capsys.readouterr()
-    assert "Result: 5.0" in captured.out  
+    assert "Result: 5.0" in captured.out
 def test_subtract(app, monkeypatch, capsys):
     """Test the subtract command."""
     monkeypatch.setattr('builtins.input', lambda _: 'subtract 5 3')
-    inputs = iter(['subtract 5 3', 'exit'])  
+    inputs = iter(['subtract 5 3', 'exit'])
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
     with pytest.raises(SystemExit):
         app.start()
     # Capture the printed output
     captured = capsys.readouterr()
-    assert "Result: 2.0" in captured.out 
+    assert "Result: 2.0" in captured.out
 def test_multiply(app, monkeypatch, capsys):
     """Test the multiply command."""
     monkeypatch.setattr('builtins.input', lambda _: 'multiply 2 3')
-    inputs = iter(['multiply 2 3', 'exit'])  
+    inputs = iter(['multiply 2 3', 'exit'])
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
     with pytest.raises(SystemExit):
         app.start()
     # Capture the printed output
     captured = capsys.readouterr()
-    assert "Result: 6.0" in captured.out 
+    assert "Result: 6.0" in captured.out
 def test_divide(app, monkeypatch, capsys):
     """Test the divide command."""
     monkeypatch.setattr('builtins.input', lambda _: 'divide 6 3')
-    inputs = iter(['divide 6 3', 'exit'])  
+    inputs = iter(['divide 6 3', 'exit'])
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
     with pytest.raises(SystemExit):
         app.start()
     # Capture the printed output
     captured = capsys.readouterr()
-    assert "Result: 2.0" in captured.out 
+    assert "Result: 2.0" in captured.out

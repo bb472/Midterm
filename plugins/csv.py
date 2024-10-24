@@ -7,7 +7,7 @@ data from a specified CSV file.
 """
 import logging
 import os
-import pandas as pd  
+import pandas as pd
 from commands import Command
 class Csv(Command):
     """A plugin that displays data from a CSV file."""
@@ -18,8 +18,8 @@ class Csv(Command):
         filename = os.getenv("PRODUCT_FILE_PATH")
         try:
             df = pd.read_csv(filename)
-            logging.info(df)     
-            print(df.to_string())        
+            logging.info(df)
+            print(df.to_string())
             logging.info("Displayed data from CSV file: %s", filename)
         except FileNotFoundError:
             print(f"Error: The file '{filename}' was not found.")

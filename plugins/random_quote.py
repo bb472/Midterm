@@ -13,11 +13,16 @@ class RandomQuote(Command):
     command_name = "quote"
 
     quotes = [
-        "The only way to do great work is to love what you do. – Steve Jobs",
-        "Life is what happens when you're busy making other plans. – John Lennon",
+        "The only way to do great work is to love what you do. "
+        "– Steve Jobs",
+        "Life is what happens when you're busy making other plans. "
+        "– John Lennon",
         "Get busy living or get busy dying. – Stephen King",
-        "You only live once, but if you do it right, once is enough. – Mae West",
-        "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. – Ralph Waldo Emerson",
+        "You only live once, but if you do it right, once is enough. "
+        "– Mae West",
+        "To be yourself in a world that is constantly trying to make "
+        "you something else is the greatest accomplishment. "
+        "– Ralph Waldo Emerson",
     ]
     @staticmethod
     def execute():
@@ -25,3 +30,7 @@ class RandomQuote(Command):
         quote = random.choice(RandomQuote.quotes)
         print("Quote of the Day:", quote)
         logging.info("Displayed quote: %s", quote)
+    @staticmethod
+    def get_random_quote():
+        """Return a random quote."""
+        return random.choice(RandomQuote.quotes)

@@ -35,7 +35,7 @@ class Calculator(Command):
             arg1, arg2 = float(arg1), float(arg2)  # Convert inputs to numbers
         except ValueError:
             logging.error("Invalid arguments for arithmetic operation. Arguments must be numbers.")
-            return 
+            return
         if operation == "add":
             return self.add( arg1, arg2)
         if operation == "subtract":
@@ -44,7 +44,7 @@ class Calculator(Command):
             return self.multiply( arg1, arg2)
         if operation == "divide":
             return self.divide( arg1, arg2)  # Handle division here
-        logging.error("Unknown operation: %s", operation)     
+        logging.error("Unknown operation: %s", operation)
     def add(self, a, b):
         """Return the sum of a and b."""
         result = a + b
@@ -67,7 +67,7 @@ class Calculator(Command):
         entry = f"Multiplied {a} * {b} = {result}"
         self.data_frame_facade.add_entry(entry)
         logging.info(entry)
-        print(entry)        
+        print(entry)
         return result
     def divide(self, a, b):
         """Return the result of a divided by b."""
@@ -121,6 +121,7 @@ class DataFrameFacade:
         if 0 <= index < len(self.history_df):
             deleted_record = self.history_df.iloc[index]
             self.history_df = self.history_df.drop(index).reset_index(drop=True)
+            self.history_df.to_csv(self.history_file, index=False)
             logging.info("Deleted record: %s", deleted_record['Calculation'])
             return f"Deleted record: {deleted_record['Calculation']}"
         logging.error("Invalid index provided for deletion.")
@@ -134,14 +135,14 @@ class DataFrameFacade:
         if os.path.exists(self.history_file):
             self.history_df = pd.read_csv(self.history_file)
             logging.info("History loaded from '%s'.", self.history_file)
-            return self.history_df        
+            return self.history_df
         logging.warning("No history file found.")
         return pd.DataFrame(columns=["Calculation"])  # Return empty DataFrame if file not found
     def clear_history(self):
         """Clear the history DataFrame."""
         self.history_df = pd.DataFrame(columns=["Calculation"])
         self.history_df.to_csv(self.history_file, index=False)
-        logging.info("History cleared.")        
+        logging.info("History cleared.") 
     def show_history(self):
         """Return a string representation of the current history."""
         if not self.history_df.empty:

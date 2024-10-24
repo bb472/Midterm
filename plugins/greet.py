@@ -13,5 +13,5 @@ class Greet(Command):
     @staticmethod
     def execute():
         """Execute the greet command with two arguments."""
-        print("Hello World")        
+        print("Hello World")
         logging.info("Hello World")

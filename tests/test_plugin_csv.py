@@ -42,7 +42,7 @@ def test_data_plugin_execute_success(monkeypatch, capfd, caplog, tmpdir):
 def test_data_plugin_execute_file_not_found(monkeypatch, capfd, caplog):
     """Test the execute method when the CSV file does not exist."""
     # Set an invalid path for the environment variable
-    monkeypatch.setenv("PRODUCT_FILE_PATH", "invalid/path/to/books.csv")    
+    monkeypatch.setenv("PRODUCT_FILE_PATH", "invalid/path/to/books.csv")
     # Capture the log output
     with caplog.at_level(logging.ERROR):
         # Execute the data command
@@ -57,7 +57,7 @@ def test_data_plugin_execute_file_not_found(monkeypatch, capfd, caplog):
 def test_data_plugin_execute_exception(monkeypatch, capfd, caplog):
     """Test the execute method when an unexpected exception occurs."""    
     # Set the environment variable to a directory instead of a file to trigger an exception
-    monkeypatch.setenv("PRODUCT_FILE_PATH", "/")    
+    monkeypatch.setenv("PRODUCT_FILE_PATH", "/")
     # Capture the log output
     with caplog.at_level(logging.ERROR):
         # Execute the data command
