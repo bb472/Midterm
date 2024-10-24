@@ -19,7 +19,6 @@ class RandomQuote(Command):
         "You only live once, but if you do it right, once is enough. – Mae West",
         "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. – Ralph Waldo Emerson",
     ]
-
     @staticmethod
     def execute():
         """Execute the quote command to display a random quote."""

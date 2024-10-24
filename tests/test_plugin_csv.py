@@ -1,3 +1,9 @@
+"""
+Unit tests for the Csv plugin in the calculator project.
+This module contains test cases that verify the behavior of the Csv plugin's
+execute method, including successful execution, handling of missing files, and
+generic exception handling.
+"""
 import logging
 import pandas as pd
 from plugins.csv import Csv
@@ -32,7 +38,6 @@ def test_data_plugin_execute_success(monkeypatch, capfd, caplog, tmpdir):
 
         # Verify the log output
         assert f"Displayed data from CSV file: {test_csv}" in caplog.text
-
 # Test case for FileNotFoundError
 def test_data_plugin_execute_file_not_found(monkeypatch, capfd, caplog):
     """Test the execute method when the CSV file does not exist."""
@@ -48,13 +53,11 @@ def test_data_plugin_execute_file_not_found(monkeypatch, capfd, caplog):
         assert "Error: The file 'invalid/path/to/books.csv' was not found." in out
         # Verify the log output
         assert "File not found: invalid/path/to/books.csv" in caplog.text
-
 # Test case for generic Exception
 def test_data_plugin_execute_exception(monkeypatch, capfd, caplog):
     """Test the execute method when an unexpected exception occurs."""    
     # Set the environment variable to a directory instead of a file to trigger an exception
-    monkeypatch.setenv("PRODUCT_FILE_PATH", "/")
-    
+    monkeypatch.setenv("PRODUCT_FILE_PATH", "/")    
     # Capture the log output
     with caplog.at_level(logging.ERROR):
         # Execute the data command

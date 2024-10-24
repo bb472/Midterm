@@ -9,7 +9,6 @@ import logging
 import os
 import pandas as pd  
 from commands import Command
-
 class Csv(Command):
     """A plugin that displays data from a CSV file."""
 

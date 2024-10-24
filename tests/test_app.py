@@ -44,10 +44,8 @@ def test_menu(app, monkeypatch, capsys):
     # Run the REPL
     with pytest.raises(SystemExit):
         app.start()
-
     # Capture the printed output
-    captured = capsys.readouterr()
-    
+    captured = capsys.readouterr()    
     # Check if the expected output is present
     assert "Available commands:" in captured.out
 
@@ -76,7 +74,6 @@ def test_delete_history_record(app, monkeypatch, capsys):
     # Capture the printed output
     captured = capsys.readouterr()
     assert "Deleted record:" in captured.out  
-
 def test_add(app, monkeypatch, capsys):
     """Test the add command."""
     monkeypatch.setattr('builtins.input', lambda _: 'add 2 3')
@@ -87,7 +84,6 @@ def test_add(app, monkeypatch, capsys):
     # Capture the printed output
     captured = capsys.readouterr()
     assert "Result: 5.0" in captured.out  
-
 def test_subtract(app, monkeypatch, capsys):
     """Test the subtract command."""
     monkeypatch.setattr('builtins.input', lambda _: 'subtract 5 3')
@@ -98,22 +94,16 @@ def test_subtract(app, monkeypatch, capsys):
     # Capture the printed output
     captured = capsys.readouterr()
     assert "Result: 2.0" in captured.out 
-
-
 def test_multiply(app, monkeypatch, capsys):
     """Test the multiply command."""
     monkeypatch.setattr('builtins.input', lambda _: 'multiply 2 3')
     inputs = iter(['multiply 2 3', 'exit'])  
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
-
     with pytest.raises(SystemExit):
         app.start()
-
     # Capture the printed output
     captured = capsys.readouterr()
     assert "Result: 6.0" in captured.out 
-
-
 def test_divide(app, monkeypatch, capsys):
     """Test the divide command."""
     monkeypatch.setattr('builtins.input', lambda _: 'divide 6 3')
@@ -123,6 +113,4 @@ def test_divide(app, monkeypatch, capsys):
         app.start()
     # Capture the printed output
     captured = capsys.readouterr()
-    assert "Result: 2.0" in captured.out  
-
-
+    assert "Result: 2.0" in captured.out 
