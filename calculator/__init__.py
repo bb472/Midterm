@@ -43,7 +43,13 @@ class Calculator(Command):
         if operation == "multiply":
             return self.multiply( arg1, arg2)
         if operation == "divide":
-            return self.divide( arg1, arg2)  # Handle division here
+            try:
+                result = self.divide(arg1, arg2)
+                return result
+            except ZeroDivisionError:
+                logging.error("Division by zero error.")
+                print("Error: Division by zero is not allowed.")
+                return
         logging.error("Unknown operation: %s", operation)
     def add(self, a, b):
         """Return the sum of a and b."""
@@ -70,9 +76,10 @@ class Calculator(Command):
         print(entry)
         return result
     def divide(self, a, b):
-        """Return the result of a divided by b."""
-        if b == 0:
+        """Return the result of a divided by b, or handle division by zero."""
+        if b == 0.0:
             logging.error("Division by zero attempted.")
+            print("Cannot divide by zero.")
             raise ValueError("Cannot divide by zero.")
         result = a / b
         entry = f"Divided {a} / {b} = {result}"
