@@ -46,15 +46,15 @@ python main.py
 
 
 2. **Basic commands:**:
-- Add: ``` add 5 3 ```
-- Subtract: ``` subtract 10 4 ```
-- Divide: ``` divide 8 2 ```
+- Add: ``` add 4 1 ```
+- Subtract: ``` subtract 13 4 ```
+- Divide: ``` divide 12 2 ```
 - Exit: ``` exit ```
 - View history: ``` history ```
-- Save history: ``` saveHistory ```
-- Load history: ``` loadHistory ```
-- Clear history: ``` clearHistory ```
-- Delete history record:``` deleteHistoryRecord <index> ```
+- Save history: ``` save_history ```
+- Load history: ``` load_history ```
+- Clear history: ``` clear_history ```
+- Delete history record:``` delete_history_record <index> ```
 - Menu: ``` menu ```
 
 
