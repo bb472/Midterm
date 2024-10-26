@@ -2,6 +2,8 @@
 
 This project entails the creation of a sophisticated calculator application built in Python, designed as part of a graduate course. The primary focus is on applying professional software development methodologies, featuring well-structured and maintainable code, implementation of design patterns, robust logging mechanisms, dynamic configuration through environment variables, effective data management using Pandas, and an interactive command-line interface (REPL) for real-time engagement.
 
+## Demo Video
+https://drive.google.com/file/d/1vQmJQvtCTVrnOnh49iXp3Pv6Fd4_Wifa/view?usp=sharing
 
 # Getting Started
 
